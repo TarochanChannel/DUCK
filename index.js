@@ -8,7 +8,8 @@ http
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const cron = require('node-cron')
+const cron = require('node-cron');
+const lainan = require("lainan-api");
 const prefix = '>>';
 
 client.on('ready', ready => {
@@ -52,5 +53,13 @@ client.on('message', async message => {
             break;
     }
 })
+client.on("message", message => {
+    if (message.author.id == client.user.id) return;
+    lainan.message(message, (reaction) => {
+        if (!reaction.responder_bool.IsAuto_search) {
+            message.channel.send(reaction.reaction);
+        };
+    });
+});
 
 client.login(process.env.token);
